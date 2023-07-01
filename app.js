@@ -9,6 +9,7 @@ const pilasRoutes = require('./src/routes/pilas.routes');
 const trazabilidadRoutes = require('./src/routes/trazabilidad.routes');
 const mortalidadRoutes = require('./src/routes/mortalidad.routes');
 const muestreoRoutes = require('./src/routes/muestreo.routes');
+const alimentacionRoutes = require('./src/routes/alimentacion.routes');
 
 //crear un servidor
 const app = express();
@@ -28,5 +29,6 @@ app.use('/pilas', pilasRoutes);
 app.use('/trazabilidad', trazabilidadRoutes);
 app.use('/mortalidad', mortalidadRoutes);
 app.use('/muestreo', muestreoRoutes);
+app.use('/alimentacion', alimentacionRoutes);
 //Exportamos app 
 module.exports = app;
