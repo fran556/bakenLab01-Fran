@@ -10,6 +10,8 @@ const trazabilidadRoutes = require('./src/routes/trazabilidad.routes');
 const mortalidadRoutes = require('./src/routes/mortalidad.routes');
 const muestreoRoutes = require('./src/routes/muestreo.routes');
 const alimentacionRoutes = require('./src/routes/alimentacion.routes');
+const concentardoRoutes = require('./src/routes/concentrado.routes');
+
 
 //crear un servidor
 const app = express();
@@ -30,5 +32,6 @@ app.use('/trazabilidad', trazabilidadRoutes);
 app.use('/mortalidad', mortalidadRoutes);
 app.use('/muestreo', muestreoRoutes);
 app.use('/alimentacion', alimentacionRoutes);
+app.use('/concentrado', concentardoRoutes );
 //Exportamos app 
 module.exports = app;
