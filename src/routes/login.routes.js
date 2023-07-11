@@ -1,5 +1,4 @@
 //importamos
-const app = require('../../app');
 const { Router } = require('express');
 
 //Importamos el crud desde user.controller

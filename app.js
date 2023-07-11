@@ -11,6 +11,8 @@ const mortalidadRoutes = require('./src/routes/mortalidad.routes');
 const muestreoRoutes = require('./src/routes/muestreo.routes');
 const alimentacionRoutes = require('./src/routes/alimentacion.routes');
 const concentardoRoutes = require('./src/routes/concentrado.routes');
+const verifyToken = require('./src/routes/validate-token.routes');
+require('./src/routes/validate-token.routes');
 
 
 //crear un servidor
@@ -25,7 +27,7 @@ app.use(cors());
 
 //endpoints
 app.use('/login', loginRoutes);
-app.use('/ingresoAlevine', ingresoAlevinesRoutes);
+app.use('/ingresoAlevine', verifyToken,ingresoAlevinesRoutes);
 app.use('/proveedores', proveedoresRoutes);
 app.use('/pilas', pilasRoutes);
 app.use('/trazabilidad', trazabilidadRoutes);
