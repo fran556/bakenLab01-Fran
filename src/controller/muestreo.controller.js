@@ -147,9 +147,9 @@ const DeleteSampling = (req, res) => {
     if (err) throw err;
     console.log(result);
     if (result.affectedRows > 0) {
-      res.send({ message: 'Usuario Eliminado' });
+      res.send({ message: 'Registro Eliminado' });
     } else {
-      res.send({ message: 'El usuario no existe en la base de datos' });
+      res.send({ message: 'El registro no existe en la base de datos' });
     }
   })
 };

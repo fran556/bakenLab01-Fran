@@ -6,11 +6,16 @@ Aqui se usa para leer los datos
 */
 
 const readMortalidad = (req, res) => {
-    const {idTrazabilidad, Fecha, Cantidad, idEmpleado, Observacion} = req.body; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT * FROM mortalidad;`;
-    const  query = mysql2.format(readQuery, [idTrazabilidad, Fecha, Cantidad, idEmpleado, Observacion]);
+  const readQuery = `
+  SELECT mortalidad.*, empleados.Nombre, empleados.Apellido
+  FROM mortalidad
+  INNER JOIN empleados ON mortalidad.idEmpleado = empleados.idEmpleado;
+`;
+    // const {idTrazabilidad, Fecha, Cantidad, idEmpleado, Observacion} = req.body; // para extraer el parametro de la ruta de la solicitud
+    // const readQuery = `SELECT * FROM mortalidad;`;
+    // const  query = mysql2.format(readQuery, [idTrazabilidad, Fecha, Cantidad, idEmpleado, Observacion]);
 
-    database.query(query,(err,result)=>{
+    database.query(readQuery,(err,result)=>{
         if (err) throw err;
         if (result.length !== 0){
             res.json(result);

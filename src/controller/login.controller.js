@@ -106,7 +106,7 @@ const validarLogin = (req, res) => {
   // Realizar la validación en la base de datos
 
   const selectQuery = `
-    SELECT r.TipoRol, e.Cedula, e.Nombre, e.Apellido, e.Telefono, l.contrasena
+    SELECT e.idEmpleado, r.TipoRol, e.Cedula, e.Nombre, e.Apellido, e.Telefono, l.contrasena
     FROM roles r
     INNER JOIN empleados e ON r.idRol = e.idRol
     INNER JOIN login l ON r.idRol = l.idRol
@@ -128,6 +128,7 @@ const validarLogin = (req, res) => {
     // Usuario autenticado correctamente
     // Generar el token con todos los datos del empleado
     const token = jwt.sign({
+      idEmpleado: result[0].idEmpleado,
       Rol: result[0].TipoRol,
       Cedula: result[0].Cedula,
       Nombre: result[0].Nombre,
