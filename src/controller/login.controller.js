@@ -128,7 +128,7 @@ const validarLogin = (req, res) => {
     // Usuario autenticado correctamente
     // Generar el token con todos los datos del empleado
     const token = jwt.sign({
-      idEmpleado: result[0].TipoRol,
+      Rol: result[0].TipoRol,
       Cedula: result[0].Cedula,
       Nombre: result[0].Nombre,
     }, process.env.JWT_SECRET, { expiresIn: '30m' }); // Utiliza la clave secreta de la variable de entorno

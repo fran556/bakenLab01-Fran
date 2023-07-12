@@ -12,7 +12,6 @@ const muestreoRoutes = require('./src/routes/muestreo.routes');
 const alimentacionRoutes = require('./src/routes/alimentacion.routes');
 const concentardoRoutes = require('./src/routes/concentrado.routes');
 const verifyToken = require('./src/routes/validate-token.routes');
-require('./src/routes/validate-token.routes');
 
 
 //crear un servidor
