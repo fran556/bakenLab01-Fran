@@ -137,7 +137,7 @@ const validarLogin = (req, res) => {
     res.header('auth-token', token).json({
       error: null,
       data: { token },
-      message: "Bienvenido"
+      message: `Ingreso corectamente como : ${result[0].Nombre} ${result[0].Apellido}`
     })
   });
 };
