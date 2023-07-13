@@ -5,20 +5,38 @@ const mysql2 = require('mysql2')
 Aqui se usa para leer los datos 
 */
 const readAlimento = (req, res) => {
-    const {Fecha, Empleado, Pila, TipoAlimento, CantidadAlimento, Observacion } = req.body; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT * FROM alimentacion;`;
-    const  query = mysql2.format(readQuery, [Fecha, Empleado, Pila, TipoAlimento, CantidadAlimento, Observacion]);
+    // const {Fecha, Empleado, Pila, TipoAlimento, CantidadAlimento, Observacion } = req.body; // para extraer el parametro de la ruta de la solicitud
+    const readQuery = `SELECT alimentacion.*,empleados.idEmpleado, empleados.Nombre, empleados.Apellido
+    FROM alimentacion
+    INNER JOIN empleados ON alimentacion.Empleado = empleados.idEmpleado;`;
+    // const  query = mysql2.format(readQuery, [Fecha, Empleado, Pila, TipoAlimento, CantidadAlimento, Observacion]);
 
-    database.query(query,(err,result)=>{
-        if (err) throw err;
-        if (result.length !== 0){
-            res.json(result);
-        }else{
-            res.json({message: 'Registro no encontrado'})
-        }
+    
+  database.query(readQuery, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error al obtener los registros de la base de datos' });
+      return;
+    }
+
+    if (result.length !== 0) {
+      res.json(result);
+    } else {
+      res.json({ message: 'Registro no encontrado' });
+    }
+  });
+
+    // database.query(query,(err,result)=>{
+    //     if (err) throw err;
+    //     if (result.length !== 0){
+    //         res.json(result);
+    //     }else{
+    //         res.json({message: 'Registro no encontrado'})
+    //     }
         
-    });
+    // });
 };
+
 const readAlimentoId = (req, res) => {
     const { id } = req.params;
     // const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,Proveedor,LoteProveedor,PilaProveedor } = req.body; // para extraer el parametro de la ruta de la solicitud
