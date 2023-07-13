@@ -6,9 +6,11 @@ Aqui se usa para leer los datos
 */
 const readIngresoAlevine = (req, res) => {
   const readQuery = `
-    SELECT ingresoalevines.*, proveedores.NombreProveedor
+    SELECT ingresoalevines.*,empleados.idEmpleado, empleados.Nombre, empleados.Apellido, proveedores.NombreProveedor
     FROM ingresoalevines
-    INNER JOIN proveedores ON ingresoalevines.idProveedor = proveedores.idproveedores;
+    INNER JOIN proveedores ON ingresoalevines.idProveedor = proveedores.idproveedores
+    INNER JOIN empleados ON ingresoalevines.Encargado = empleados.idEmpleado;
+
   `;
 
   database.query(readQuery, (err, result) => {
@@ -29,7 +31,10 @@ const readIngresoAlevine = (req, res) => {
 const readIngresoAlevineId = (req, res) => {
     const { id } = req.params;
     // const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,Proveedor,LoteProveedor,PilaProveedor } = req.body; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT * FROM ingresoalevines where id=?;`;
+    const readQuery = `SELECT ingresoalevines.*,empleados.Nombre, empleados.Apellido
+    FROM ingresoalevines
+    INNER JOIN empleados ON ingresoalevines.Encargado = empleados.idEmpleado
+    WHERE ingresoalevines.id=?;`;
     const  query = mysql2.format(readQuery, [id]);
 
     database.query(query,(err,result)=>{
