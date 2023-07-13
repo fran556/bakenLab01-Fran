@@ -5,6 +5,7 @@ const verifyToken = (req, res, next) => {
     if (!authHeader) return res.status(401).json({ error: 'Acceso denegado' });
   
     const token = authHeader.split(' ')[1]; // Se asume que el token está en el formato 'Bearer <token>'
+    
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
       req.user = verified;

@@ -133,7 +133,7 @@ const validarLogin = (req, res) => {
       Cedula: result[0].Cedula,
       Nombre: result[0].Nombre,
       Apellido: result[0].Apellido
-    }, process.env.JWT_SECRET, { expiresIn: '30m' }); // Utiliza la clave secreta de la variable de entorno
+    }, process.env.JWT_SECRET, { expiresIn: '60m' }); // Utiliza la clave secreta de la variable de entorno
     console.log(process.env.JWT_SECRET);
     // res.status(200).json({ token });
     res.header('auth-token', token).json({
