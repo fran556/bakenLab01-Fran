@@ -47,17 +47,18 @@ const readTrazabilidadId = (req, res) => {
 Aui para crear o insertar un usuario a la base de datos 
 */
 const createTrazabilidad = (req, res) => {
-    const {idMuestreo, idPila, TipoPez, Fecha, Cantidad, idEmpleado, Origen} = req.body;
+
+    const { idMuestreo, idPila, TipoPez, Fecha, Cantidad, idEmpleado } = req.body;
   
-    if (!idMuestreo || !idPila || !TipoPez || !Fecha || !Cantidad || !idEmpleado || !Origen) {
+    if (!idMuestreo || !idPila || !TipoPez || !Fecha || !Cantidad || !idEmpleado) {
       res.status(400).send({ error: "Faltan campos requeridos" });
       return;
     }
   
-    const createQuery = `INSERT INTO  trazabilidad (idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    const query = mysql2.format(createQuery, [idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen]);
+    const callProcedure = `CALL IngresarTrazabilidad(?, ?, ?, ?, ?, ?)`;
+    const values = [idMuestreo, idPila, TipoPez, Fecha, Cantidad, idEmpleado];
   
-    database.query(query, (err, result) => {
+    database.query(callProcedure, values, (err, result) => {
       if (err) {
         console.error("Error al registrar Trazabilidad:", err);
         res.status(500).send({ error: "Error en el servidor" });
@@ -66,6 +67,27 @@ const createTrazabilidad = (req, res) => {
         res.send({ message: "Trazabilidad registrada" });
       }
     });
+  
+
+    // const {idMuestreo, idPila, TipoPez, Fecha, Cantidad, idEmpleado, Origen} = req.body;
+  
+    // if (!idMuestreo || !idPila || !TipoPez || !Fecha || !Cantidad || !idEmpleado || !Origen) {
+    //   res.status(400).send({ error: "Faltan campos requeridos" });
+    //   return;
+    // }
+  
+    // const createQuery = `INSERT INTO  trazabilidad (idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    // const query = mysql2.format(createQuery, [idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen]);
+  
+    // database.query(query, (err, result) => {
+    //   if (err) {
+    //     console.error("Error al registrar Trazabilidad:", err);
+    //     res.status(500).send({ error: "Error en el servidor" });
+    //   } else {
+    //     console.log(result);
+    //     res.send({ message: "Trazabilidad registrada" });
+    //   }
+    // });
   };
   
 /*

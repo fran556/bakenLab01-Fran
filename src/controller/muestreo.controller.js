@@ -43,40 +43,21 @@ Aui para crear o insertar un usuario a la base de datos
 */
 const CreateSampling = (req, res) => {
 
-  const { Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion, PilaL } = req.body; /destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud./
+  const { Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion,idTrazabilidad } = req.body; /destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud./
 
-  console.log(PilaL)
+  console.log(idTrazabilidad)
 
-  const UltimaTrazabilidad = `SELECT MAX(idTrazabilidad) As idTrazabilidad FROM aprotila.trazabilidad where idPila = ?`
-  const queryy = mysql2.format(UltimaTrazabilidad, [PilaL]);
-
-  console.log(queryy);
-  database.query(queryy, (error, results) => {
+  const createQuery = `CALL ingresarMuestreo(?, ?, ?, ?, ?, ?, ?)`;
+  const values = [idTrazabilidad, Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion];
+  database.query(createQuery, values, (error, result) => {
     if (error) {
-      console.error("Error al obtener el último idTrazabilidad:", error);
+      console.error("Error al insertar los datos:", error);
       // Manejar el error apropiadamente
     } else {
-      const idTrazabilidad = results[0].idTrazabilidad;
-      if (idTrazabilidad === null) {
-        console.log(idTrazabilidad)
-        res.send({ message: 'Esa trazabilidad no existe' });
-      } else {
-        console.log(idTrazabilidad)
-        const createQuery = `INSERT INTO aprotila.muestreo (idTrazabilidad, Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        const values = [idTrazabilidad, Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion];
-        database.query(createQuery, values, (error, result) => {
-          if (error) {
-            console.error("Error al insertar los datos:", error);
-            // Manejar el error apropiadamente
-          } else {
-            // Los datos se insertaron correctamente
-            res.send({ message: 'Usuario Registrado' });
-          }
-        });
-      }
-
+      // Los datos se insertaron correctamente
+      res.send({ message: 'Usuario Registrado' });
     }
-  });
+  });;
 
 
 

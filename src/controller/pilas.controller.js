@@ -13,7 +13,7 @@ const readPilas = (req, res) => {
         if (result[0] !== undefined){
             res.json(result);
         }else{
-            res.json({message: 'Usuario no encontrado'})
+            res.json({message: 'Pila no encontrado'})
         }
     });
 };
@@ -28,7 +28,7 @@ const readActivePilas = (req, res) => {
         if (result[0] !== undefined){
             res.json(result);
         }else{
-            res.json({message: 'Usuario no encontrado'})
+            res.json({message: 'Pila no encontrado'})
         }
     });
 };
@@ -43,7 +43,7 @@ const readDisablePilas = (req, res) => {
         if (result[0] !== undefined){
             res.json(result);
         }else{
-            res.json({message: 'Usuario no encontrado'})
+            res.json({message: 'Pila no encontrado'})
         }
     });
 };
