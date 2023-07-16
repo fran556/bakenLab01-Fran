@@ -43,7 +43,7 @@ Aui para crear o insertar un usuario a la base de datos
 */
 const CreateSampling = (req, res) => {
 
-  const { Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion,idTrazabilidad } = req.body; /destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud./
+  const { Cantidad, PesoPromedio, Fecha, Aprobacion, idEmpleado, Observacion,idTrazabilidad } = req.body; /*destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud.*/
 
   console.log(idTrazabilidad)
 

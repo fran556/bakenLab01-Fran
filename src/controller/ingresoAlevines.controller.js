@@ -51,25 +51,44 @@ const readIngresoAlevineId = (req, res) => {
 Aui para crear o insertar un usuario a la base de datos 
 */
 const createIngresoAlevine = (req, res) => {
-    const { Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor } = req.body;
+
+  const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,idProveedor,LoteProveedor,PilaProveedor } = req.body; /*destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud.*/
   
-    if (!Fecha || !Encargado || !EspeciePescado || !Cantidad || !PilaIngreso || !idProveedor || !LoteProveedor || !PilaProveedor) {
-      res.status(400).send({ error: "Faltan campos requeridos" });
-      return;
+
+  const createQuery = `CALL IngresarAlevines(?,?,?,?,?,?,?,?);`;
+  const values = [Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor];
+  database.query(createQuery, values, (error, result) => {
+    if (error) {
+      console.error("Error al insertar los datos:", error);
+      res.status(500).send({ error: "No se puede completar el registro" });
+      // Manejar el error apropiadamente
+    } else {
+      // Los datos se insertaron correctamente
+      res.send({ message: "Ingreso de Alevines registrado" });
     }
+  });;
+
+
+
+    // const { Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor } = req.body;
   
-    const createQuery = `INSERT INTO ingresoalevines (Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    const query = mysql2.format(createQuery, [Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor]);
+    // if (!Fecha || !Encargado || !EspeciePescado || !Cantidad || !PilaIngreso || !idProveedor || !LoteProveedor || !PilaProveedor) {
+    //   res.status(400).send({ error: "Faltan campos requeridos" });
+    //   return;
+    // }
   
-    database.query(query, (err, result) => {
-      if (err) {
-        console.error("Error al registrar el ingreso de alevines:", err);
-        res.status(500).send({ error: "No se puede completar el registro" });
-      } else {
-        console.log(result);
-        res.send({ message: "Ingreso de Alevines registrado" });
-      }
-    });
+    // const createQuery = `INSERT INTO ingresoalevines (Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    // const query = mysql2.format(createQuery, [Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor]);
+  
+    // database.query(query, (err, result) => {
+    //   if (err) {
+    //     console.error("Error al registrar el ingreso de alevines:", err);
+    //     res.status(500).send({ error: "No se puede completar el registro" });
+    //   } else {
+    //     console.log(result);
+    //     res.send({ message: "Ingreso de Alevines registrado" });
+    //   }
+    // });
   };
   
 /*
