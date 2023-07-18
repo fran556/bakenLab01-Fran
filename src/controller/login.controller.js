@@ -110,7 +110,7 @@ const validarLogin = (req, res) => {
     FROM roles r
     INNER JOIN empleados e ON r.idRol = e.idRol
     INNER JOIN login l ON r.idRol = l.idRol
-     WHERE l.Cedula = ? AND l.contrasena = ?;
+     WHERE l.Cedula = ? AND l.contrasena = ? and l.Cedula=e.Cedula;
   `;
 
   const query = mysql2.format(selectQuery, [Cedula, contrasena]);
@@ -139,7 +139,7 @@ const validarLogin = (req, res) => {
     res.header('auth-token', token).json({
       error: null,
       data: { token },
-      message: `Ingreso corectamente como : ${result[0].Nombre} ${result[0].Apellido}`
+      message: `Ingresando como : ${result[0].Nombre} ${result[0].Apellido}`
     })
   });
 };

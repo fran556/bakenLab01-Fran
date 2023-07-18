@@ -43,6 +43,23 @@ const readTrazabilidadId = (req, res) => {
         }
     });
 };
+//obtener la trazabilidad de la ultima pila 
+const readTrazabilidadIdpila = (req, res) => {
+    const { id } = req.params;
+    // const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,Proveedor,LoteProveedor,PilaProveedor } = req.body; // para extraer el parametro de la ruta de la solicitud
+    const readQuery = `SELECT MAX(idTrazabilidad) as idTrazabilidad FROM trazabilidad WHERE idPila=?;`;
+    const  query = mysql2.format(readQuery, [id]);
+
+    database.query(query,(err,result)=>{
+        if (err) throw err;
+        if (result.length !== 0){
+            res.json(result);
+            console.log(result);
+        }else{
+            res.json({message: 'Registro no encontrado'})
+        }
+    });
+};
 /*
 Aui para crear o insertar un usuario a la base de datos 
 */
@@ -64,30 +81,16 @@ const createTrazabilidad = (req, res) => {
         res.status(500).send({ error: "Error en el servidor" });
       } else {
         console.log(result);
-        res.send({ message: "Trazabilidad registrada" });
+        if(result.affectedRows===0){
+          
+          res.send({ message: "Trazabilidad registrada" });
+        }else{
+          res.send({ message: "Trazabilidad No registrada hacer Muestreo primero" });
+        }
+        
       }
     });
   
-
-    // const {idMuestreo, idPila, TipoPez, Fecha, Cantidad, idEmpleado, Origen} = req.body;
-  
-    // if (!idMuestreo || !idPila || !TipoPez || !Fecha || !Cantidad || !idEmpleado || !Origen) {
-    //   res.status(400).send({ error: "Faltan campos requeridos" });
-    //   return;
-    // }
-  
-    // const createQuery = `INSERT INTO  trazabilidad (idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    // const query = mysql2.format(createQuery, [idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen]);
-  
-    // database.query(query, (err, result) => {
-    //   if (err) {
-    //     console.error("Error al registrar Trazabilidad:", err);
-    //     res.status(500).send({ error: "Error en el servidor" });
-    //   } else {
-    //     console.log(result);
-    //     res.send({ message: "Trazabilidad registrada" });
-    //   }
-    // });
   };
   
 /*
@@ -182,4 +185,5 @@ module.exports = {
     createTrazabilidad,
     updateTrazabilidad,
     deleteTrazabilidad,  
+    readTrazabilidadIdpila
 };

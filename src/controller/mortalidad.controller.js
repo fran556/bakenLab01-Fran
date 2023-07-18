@@ -50,6 +50,7 @@ const createMortalidad = (req, res) => {
   
     if (!idTrazabilidad || !Fecha || !Cantidad || !idEmpleado || !Observacion) {
       res.status(400).send({ error: "Faltan campos requeridos" });
+      console.log(idTrazabilidad, Fecha, Cantidad, idEmpleado, Observacion);
       return;
     }
   

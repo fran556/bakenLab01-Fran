@@ -9,7 +9,8 @@ const {
     readTrazabilidadId,
     createTrazabilidad,
     updateTrazabilidad,
-    deleteTrazabilidad,    
+    deleteTrazabilidad,  
+    readTrazabilidadIdpila,  
 }= require('../controller/trazabilidad.controller');
 
 const router = Router();
@@ -20,6 +21,7 @@ const router = Router();
 
 router.get('/', readTrazabilidad);
 router.get('/:id',readTrazabilidadId );
+router.get('/pila/:id',readTrazabilidadIdpila );
 router.post('/', createTrazabilidad);
 router.put('/:id', updateTrazabilidad);
 router.delete('/:id', deleteTrazabilidad);
