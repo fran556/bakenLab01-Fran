@@ -52,11 +52,11 @@ Aui para crear o insertar un usuario a la base de datos
 */
 const createIngresoAlevine = (req, res) => {
 
-  const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,idProveedor,LoteProveedor,PilaProveedor } = req.body; /*destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud.*/
+  const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,idProveedor,LoteProveedor,PilaProveedor,LoteAprotila } = req.body; /*destructuring, req.body se utiliza para acceder a los datos enviados en el cuerpo de la solicitud.*/
   
 
-  const createQuery = `CALL IngresarAlevines(?,?,?,?,?,?,?,?);`;
-  const values = [Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor];
+  const createQuery = `CALL IngresarAlevines(?,?,?,?,?,?,?,?,?);`;
+  const values = [Fecha, Encargado, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor,LoteAprotila];
   database.query(createQuery, values, (error, result) => {
     if (error) {
       console.error("Error al insertar los datos:", error);

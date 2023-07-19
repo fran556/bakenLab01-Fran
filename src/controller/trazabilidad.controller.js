@@ -10,7 +10,7 @@ const readTrazabilidad = (req, res) => {
   const readQuery = `
     SELECT trazabilidad.*, empleados.Nombre
     FROM trazabilidad
-    INNER JOIN empleados ON trazabilidad.idEmpleado = empleados.idEmpleado;
+    INNER JOIN empleados ON trazabilidad.idEmpleado = empleados.idEmpleado order by trazabilidad.idTrazabilidad desc;
   `;
     // const {idMuestreo, idPila, TipoPez, Fecha, Cantidad,idEmpleado, Origen} = req.body; // para extraer el parametro de la ruta de la solicitud
     // const readQuery = `SELECT * FROM trazabilidad;`;
@@ -178,6 +178,24 @@ const deleteTrazabilidad = (req, res) => {
     }
     
   };
+
+  // traer peces actuales
+  const readTotalPecesPila = (req, res) => {
+    const { id } = req.params;
+    // const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,Proveedor,LoteProveedor,PilaProveedor } = req.body; // para extraer el parametro de la ruta de la solicitud
+    const readQuery = `SELECT PilasExistente(?) as PecesActuales;`;
+    const  query = mysql2.format(readQuery, [id]);
+
+    database.query(query,(err,result)=>{
+        if (err) throw err;
+        if (result.length !== 0){
+            res.json(result);
+            console.log(result);
+        }else{
+            res.json({message: 'Registro no encontrado'})
+        }
+    });
+};
 // Aqui se exporta el crud 
 module.exports = {
     readTrazabilidad,
@@ -185,5 +203,6 @@ module.exports = {
     createTrazabilidad,
     updateTrazabilidad,
     deleteTrazabilidad,  
-    readTrazabilidadIdpila
+    readTrazabilidadIdpila,
+    readTotalPecesPila
 };
