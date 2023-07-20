@@ -55,7 +55,7 @@ const CreateSampling = (req, res) => {
       // Manejar el error apropiadamente
     } else {
       // Los datos se insertaron correctamente
-      res.send({ message: 'Usuario Registrado' });
+      res.send({ message: 'Muestreo Registrado' });
     }
   });;
 

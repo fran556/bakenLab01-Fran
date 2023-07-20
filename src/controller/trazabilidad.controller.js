@@ -76,19 +76,33 @@ const createTrazabilidad = (req, res) => {
     const values = [idMuestreo, idPila, TipoPez, Fecha, Cantidad, idEmpleado];
   
     database.query(callProcedure, values, (err, result) => {
-      if (err) {
-        console.error("Error al registrar Trazabilidad:", err);
-        res.status(500).send({ error: "Error en el servidor" });
+      if (err) throw err;
+      if (result.length !== 0){
+        // console.error("Error al insertar los datos:", err);
+        // res.status(500).send({ err: "No se puede completar el registro" });
+        // Manejar el error apropiadamente
+        res.json(result)
+
       } else {
-        console.log(result);
-        if(result.affectedRows===0){
-          
-          res.send({ message: "Trazabilidad registrada" });
-        }else{
-          res.send({ message: "Trazabilidad No registrada hacer Muestreo primero" });
-        }
-        
+       
+        // res.send({ message: "Trazabilidad registrada" });
+      
+        res.send({ message: "Trazabilidad No registrada hacer Muestreo primero" });
       }
+
+      // if (err) {
+      //   console.error("Error al registrar Trazabilidad:", err);
+      //   res.status(500).send({ error: "Error en el servidor" });
+      // } else {
+      //   console.log(result);
+      //   if(res.affectedRows!==0){
+          
+      //     res.send({ message: "Trazabilidad registrada" });
+      //   }else{
+      //     res.send({ message: "Trazabilidad No registrada hacer Muestreo primero" });
+      //   }
+        
+      // }
     });
   
   };
@@ -182,20 +196,31 @@ const deleteTrazabilidad = (req, res) => {
   // traer peces actuales
   const readTotalPecesPila = (req, res) => {
     const { id } = req.params;
-    // const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,Proveedor,LoteProveedor,PilaProveedor } = req.body; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT PilasExistente(?) as PecesActuales;`;
-    const  query = mysql2.format(readQuery, [id]);
-
-    database.query(query,(err,result)=>{
-        if (err) throw err;
-        if (result.length !== 0){
-            res.json(result);
-            console.log(result);
-        }else{
-            res.json({message: 'Registro no encontrado'})
-        }
+    const readQuery = `SELECT PilasExistente1(?) as Resultado ;`;
+    const query = mysql2.format(readQuery, [id]);
+  
+    database.query(query, (err, result) => {
+      if (err) throw err;
+      if (result.length !== 0) {
+        // Extraemos el objeto que contiene las propiedades Lote y CantidadPeces
+        const data = result[0].Resultado;
+  
+        // Accedemos a las propiedades CantidadPeces y Lote del objeto data
+        const cantidadPeces = data.CantidadPeces;
+        const lote = data.Lote;
+  
+        // Imprimimos la información en la consola
+        console.log(`Cantidad de peces: ${cantidadPeces}`);
+        console.log(`Lote: ${lote}`);
+  
+        res.json(result);
+      } else {
+        res.json({ message: 'Registro no encontrado' });
+      }
     });
-};
+  };
+  
+  
 // Aqui se exporta el crud 
 module.exports = {
     readTrazabilidad,
