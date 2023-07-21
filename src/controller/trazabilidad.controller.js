@@ -82,7 +82,6 @@ const createTrazabilidad = (req, res) => {
         // res.status(500).send({ err: "No se puede completar el registro" });
         // Manejar el error apropiadamente
         res.json(result)
-
       } else {
        
         // res.send({ message: "Trazabilidad registrada" });
