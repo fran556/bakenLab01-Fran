@@ -95,61 +95,82 @@ const createIngresoAlevine = (req, res) => {
 Aqui se actualiza 
 */
 const updateIngresoAlevine = (req, res) => {
-  const { id } = req.params;
 
-  const selectQuery = `SELECT * FROM ingresoalevines WHERE id = ?;`;
-  const query = mysql2.format(selectQuery, [id]);
 
-  try {
+    const { id } = req.params; // para extraer el parametro de la ruta de la solicitud 
+    const { EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor,LoteAprotila } = req.body;
+  
+    if (!EspeciePescado || !Cantidad || !PilaIngreso || !idProveedor || !LoteProveedor || !PilaProveedor || !LoteAprotila) {
+      res.status(400).json({ message: 'No se pueden actualizar los campos vacíos' });
+      return;
+    }
+  
+    const updateQuery = `call actualizarIngresoTrazabilidad(?,?,?,?,?,?,?,?);`;
+    const query = mysql2.format(updateQuery, [id, EspeciePescado, Cantidad, PilaIngreso, idProveedor, LoteProveedor, PilaProveedor, LoteAprotila]);
+  
     database.query(query, (err, result) => {
-      // console.log(result);
-      if (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Error al obtener los datos de la base de datos' });
-        return;
-      }
-
-      if (result.length === 0) {
-        res.status(404).json({ message: 'Alevin no encontrado' });
-        return;
-      }
-
-      const alevinActual = result[0];
-
-      const campos = ['Fecha', 'Encargado', 'EspeciePescado', 'Cantidad', 'PilaIngreso', 'idProveedor', 'LoteProveedor', 'PilaProveedor'];
-
-      let datosModificados = false; // Inicializar como false
-
-      const valoresModificados = campos.reduce((acc, campo) => {
-        if (req.body[campo] && req.body[campo] !== alevinActual[campo]) {
-          acc[campo] = req.body[campo];
-        }
-        return acc;
-      }, {});
-
-      if (Object.keys(valoresModificados).length === 0) {
-        res.status(400).json({ message: 'No es necesario realizar la actualización' });
-        return;
-      }
-      const updateQuery = `UPDATE ingresoalevines SET ? WHERE id= ?;`;
-      const updateValues = [valoresModificados, id]; // Copia de los valores de req.body
-      const updateQueryFormatted = mysql2.format(updateQuery, updateValues);
-
-      database.query(updateQueryFormatted, (err, result) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: 'Error al actualizar el registro' });
-          return;
-        }
-
-        console.log(result);
-        res.json({ message: 'Registro actualizado' });
-      });
+      if (err) throw err;
+      res.json({ message: 'Se actualizo correctamente el muestreo' })
+  
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Error en el servidor' });
-  }
+  
+  
+  //=========================================================
+  // const { id } = req.params;
+
+  // const selectQuery = `SELECT * FROM ingresoalevines WHERE id = ?;`;
+  // const query = mysql2.format(selectQuery, [id]);
+
+  // try {
+  //   database.query(query, (err, result) => {
+  //     // console.log(result);
+  //     if (err) {
+  //       console.log(err);
+  //       res.status(500).json({ message: 'Error al obtener los datos de la base de datos' });
+  //       return;
+  //     }
+
+  //     if (result.length === 0) {
+  //       res.status(404).json({ message: 'Alevin no encontrado' });
+  //       return;
+  //     }
+
+  //     const alevinActual = result[0];
+
+  //     const campos = ['Fecha', 'Encargado', 'EspeciePescado', 'Cantidad', 'PilaIngreso', 'idProveedor', 'LoteProveedor', 'PilaProveedor','LoteAprotila'];
+
+  //     let datosModificados = false; // Inicializar como false
+
+  //     const valoresModificados = campos.reduce((acc, campo) => {
+  //       if (req.body[campo] && req.body[campo] !== alevinActual[campo]) {
+  //         acc[campo] = req.body[campo];
+  //       }
+  //       return acc;
+  //     }, {});
+
+  //     if (Object.keys(valoresModificados).length === 0) {
+  //       res.status(400).json({ message: 'No es necesario realizar la actualización' });
+  //       return;
+  //     }
+  //     const updateQuery = `UPDATE ingresoalevines SET ? WHERE id= ?;`;
+  //     const updateValues = [valoresModificados, id]; // Copia de los valores de req.body
+  //     const updateQueryFormatted = mysql2.format(updateQuery, updateValues);
+
+  //     database.query(updateQueryFormatted, (err, result) => {
+  //       if (err) {
+  //         console.log(err);
+  //         res.status(500).json({ message: 'Error al actualizar el registro' });
+  //         return;
+  //       }
+
+  //       console.log(result);
+  //       res.json({ message: 'Registro actualizado' });
+  //     });
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(500).json({ message: 'Error en el servidor' });
+  // }
 };
 
 
@@ -162,7 +183,7 @@ const deleteIngresoAlevine = (req, res) => {
     try {
       const { id } = req.params;
   
-      const deleteQuery = `DELETE FROM ingresoalevines WHERE id=?`;
+      const deleteQuery = `call EliminarIngresoAlevin(?)`;
       const query = mysql2.format(deleteQuery, [id]);
   
       database.query(query, (err, result) => {
