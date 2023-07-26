@@ -110,7 +110,9 @@ const updateIngresoAlevine = (req, res) => {
   
     database.query(query, (err, result) => {
       if (err) throw err;
-      res.json({ message: 'Se actualizo correctamente el muestreo' })
+      console.log(result);
+      res.json(result);
+      // res.json({ message: 'Se actualizo correctamente el muestreo' })
   
     });
   

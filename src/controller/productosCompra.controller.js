@@ -4,12 +4,12 @@ const mysql2 = require('mysql2')
 /* 
 Aqui se usa para leer los datos 
 */
-const readConcentrado = (req, res) => {
-    const {FechaCompra, Marca, Proveedor, CantidadProteina, Precio, FechaVencimiento } = req.body; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT * FROM concentrado;`;
-    const  query = mysql2.format(readQuery, [FechaCompra, Marca, Proveedor, CantidadProteina, Precio, FechaVencimiento]);
+const readProductosCompra = (req, res) => {
+   const readQuery = `SELECT productoscompra.*, proveedores.idproveedores, proveedores.NombreProveedor, empleados.Nombre, empleados.Apellido FROM productoscompra
+   INNER JOIN proveedores ON productoscompra.Proveedor = proveedores.idproveedores
+   INNER JOIN empleados ON empleados.idEmpleado = productoscompra.Empleado;`;
 
-    database.query(query,(err,result)=>{
+    database.query(readQuery,(err,result)=>{
         if (err) throw err;
         if (result.length !== 0){
             res.json(result);
@@ -19,10 +19,10 @@ const readConcentrado = (req, res) => {
         
     });
 };
-const readConcentradoId = (req, res) => {
+const readProductosCompraId = (req, res) => {
     const { id } = req.params;
     // const { Fecha,Encargado,EspeciePescado,Cantidad,PilaIngreso,Proveedor,LoteProveedor,PilaProveedor } = req.body; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT * FROM concentrado where idConcentrado= ?;`;
+    const readQuery = `SELECT * FROM productoscompra where idCompra= ?;`;
     const  query = mysql2.format(readQuery, [id]);
 
     database.query(query,(err,result)=>{
@@ -38,16 +38,21 @@ const readConcentradoId = (req, res) => {
 /*
 Aui para crear o insertar un usuario a la base de datos 
 */
-const createConcentrado = (req, res) => {
-    const {FechaCompra, Marca, Proveedor, CantidadProteina, Precio, FechaVencimiento } = req.body;
+const createProductosCompra = (req, res) => {
+    const {FechaCompra,Empleado, Marca, Proveedor, TipoProducto,Cantidad, ValorMedidas, CantidadProteina, MedidaProteina, Precio, FechaVencimiento } = req.body;
   
-    if (!FechaCompra || !Marca || !Proveedor || !CantidadProteina || !Precio || !FechaVencimiento ) {
+     // Define valores por defecto para los campos que puedan faltar
+    
+    const CantidadProteinaDefault = CantidadProteina || 0;
+    const MedidaProteinaDefault = MedidaProteina || '-----';
+    
+    if (!FechaCompra || !Empleado || !Marca || !Proveedor || !TipoProducto || !Cantidad || !ValorMedidas || !Precio || !FechaVencimiento ) {
       res.status(400).send({ error: "Faltan campos requeridos" });
       return;
     }
   
-    const createQuery = `INSERT INTO concentrado (FechaCompra, Marca, Proveedor, CantidadProteina, Precio, FechaVencimiento ) VALUES (?, ?, ?, ?, ?, ?)`;
-    const query = mysql2.format(createQuery, [FechaCompra, Marca, Proveedor, CantidadProteina, Precio, FechaVencimiento]);
+    const createQuery = `INSERT INTO productoscompra (FechaCompra, Empleado, Marca, Proveedor, TipoProducto,Cantidad, ValorMedidas, CantidadProteina, MedidaProteina, Precio, FechaVencimiento ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = mysql2.format(createQuery, [FechaCompra, Empleado, Marca, Proveedor, TipoProducto,Cantidad, ValorMedidas, CantidadProteinaDefault, MedidaProteinaDefault, Precio, FechaVencimiento]);
   
     database.query(query, (err, result) => {
       if (err) {
@@ -63,11 +68,11 @@ const createConcentrado = (req, res) => {
 /*
 Aqui se actualiza 
 */
-const updateConcentrado = (req, res) => {
+const updateProductosCompra = (req, res) => {
     const { id } = req.params;
     // const { NombreProveedor, Direccion, Provincia, Canton, Distrito, NombreContacto, Telefono, Email } = req.body;
   
-    const selectQuery = `SELECT * FROM concentrado WHERE idConcentrado = ?;`;
+    const selectQuery = `SELECT * FROM productoscompra WHERE idCompra = ?;`;
     const query = mysql2.format(selectQuery, [id]);
   
     try {
@@ -79,16 +84,16 @@ const updateConcentrado = (req, res) => {
         }
   
         if (result.length === 0) {
-          res.status(404).json({ message: 'Concentrado no encontrado' });
+          res.status(404).json({ message: 'Compra no encontrado' });
           return;
         }
   
-        const ConcentradoActual = result[0];
+        const CompraActual = result[0];
   
-        const campos = ['FechaCompra','Marca', 'Proveedor', 'CantidadProteina', 'Precio', 'FechaVencimiento'];
+        const campos = ['FechaCompra', 'Empleado','Marca', 'Proveedor','TipoProducto', 'Cantidad','ValorMedidas', 'CantidadProteina', 'MedidaProteina', 'Precio', 'FechaVencimiento'];
   
         const valoresModificados = campos.reduce((acc, campo) => {
-          if (req.body[campo] && req.body[campo] !== ConcentradoActual[campo]) {
+          if (req.body[campo] && req.body[campo] !== CompraActual[campo]) {
             acc[campo] = req.body[campo];
           }
           return acc;
@@ -99,7 +104,7 @@ const updateConcentrado = (req, res) => {
           return;
         }
   
-        const updateQuery = `UPDATE concentrado SET ? WHERE idConcentrado = ?;`;
+        const updateQuery = `UPDATE productoscompra SET ? WHERE idCompra = ?;`;
         const updateValues = [valoresModificados, id];
         const updateQueryFormatted = mysql2.format(updateQuery, updateValues);
   
@@ -123,12 +128,12 @@ const updateConcentrado = (req, res) => {
 /*
 aqui se elimina
 */
-const deleteConcentrado = (req, res) => {
+const deleteProductosCompra = (req, res) => {
     try {
       const { id } = req.params;
       console.log(id);
   
-      const deleteQuery = `DELETE FROM concentrado WHERE idConcentrado = ?`;
+      const deleteQuery = `DELETE FROM productoscompra WHERE idCompra = ?`;
       const query = mysql2.format(deleteQuery, [id]);
   
       database.query(query, (err, result) => {
@@ -148,9 +153,9 @@ const deleteConcentrado = (req, res) => {
   };
 // Aqui se exporta el crud 
 module.exports = {
-    readConcentradoId,
-    readConcentrado,
-    createConcentrado,
-    updateConcentrado,
-    deleteConcentrado, 
+    readProductosCompraId,
+    readProductosCompra,
+    createProductosCompra,
+    updateProductosCompra,
+    deleteProductosCompra, 
 }; 

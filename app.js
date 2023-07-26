@@ -10,7 +10,7 @@ const trazabilidadRoutes = require('./src/routes/trazabilidad.routes');
 const mortalidadRoutes = require('./src/routes/mortalidad.routes');
 const muestreoRoutes = require('./src/routes/muestreo.routes');
 const alimentacionRoutes = require('./src/routes/alimentacion.routes');
-const concentardoRoutes = require('./src/routes/concentrado.routes');
+const productosCompraRoutes = require('./src/routes/productosCompra.routes');
 const verifyToken = require('./src/routes/validate-token.routes');
 
 
@@ -33,6 +33,6 @@ app.use('/trazabilidad', trazabilidadRoutes);
 app.use('/mortalidad', mortalidadRoutes);
 app.use('/muestreo', muestreoRoutes);
 app.use('/alimentacion', alimentacionRoutes);
-app.use('/concentrado', concentardoRoutes );
+app.use('/productosCompra', productosCompraRoutes );
 //Exportamos app 
 module.exports = app;
