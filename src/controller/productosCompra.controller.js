@@ -90,7 +90,7 @@ const updateProductosCompra = (req, res) => {
   
         const CompraActual = result[0];
   
-        const campos = ['FechaCompra', 'Empleado','Marca', 'Proveedor','TipoProducto', 'Cantidad','ValorMedidas', 'CantidadProteina', 'MedidaProteina', 'Precio', 'FechaVencimiento'];
+        const campos = ['Marca', 'Proveedor','TipoProducto', 'Cantidad','ValorMedidas', 'CantidadProteina', 'MedidaProteina', 'Precio', 'FechaVencimiento'];
   
         const valoresModificados = campos.reduce((acc, campo) => {
           if (req.body[campo] && req.body[campo] !== CompraActual[campo]) {

@@ -11,6 +11,10 @@ const mortalidadRoutes = require('./src/routes/mortalidad.routes');
 const muestreoRoutes = require('./src/routes/muestreo.routes');
 const alimentacionRoutes = require('./src/routes/alimentacion.routes');
 const productosCompraRoutes = require('./src/routes/productosCompra.routes');
+const empleadosRoutes = require('./src/routes/empleados.routes');
+const ventasRoutes = require('./src/routes/ventas.routes');
+const registroRoutes = require('./src/routes/registro.routes');
+const productosRoutes = require('./src/routes/productos.routes');
 const verifyToken = require('./src/routes/validate-token.routes');
 
 
@@ -34,5 +38,9 @@ app.use('/mortalidad', mortalidadRoutes);
 app.use('/muestreo', muestreoRoutes);
 app.use('/alimentacion', alimentacionRoutes);
 app.use('/productosCompra', productosCompraRoutes );
+app.use('/empleados', empleadosRoutes );
+app.use('/ventas', ventasRoutes);
+app.use('/registro', registroRoutes);
+app.use('/productos', productosRoutes);
 //Exportamos app 
 module.exports = app;
