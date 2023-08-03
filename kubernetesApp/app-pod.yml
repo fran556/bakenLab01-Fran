@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: app-pod
+    labels:
+        app: app-pod
+        type: mvc
+
+spec: 
+  containers:
+    - name: app-pod
+      image: fran556/apilab01:latest
+      ports: 
+        - containerPort: 3000

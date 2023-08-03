@@ -8,16 +8,7 @@ Aqui se usa para leer los datos
 //AQUIE LEEMOS TODOS LOS EMPLEADOS LISTO PARA ENVIARLOS!
 const readEmpleados = (req, res) => {
     //const { id } = req.params; // para extraer el parametro de la ruta de la solicitud
-    const readQuery = `SELECT * FROM empleados;`;
-  
-    database.query(readQuery, (err, result) => {
-      if (err) throw err;
-      if (result[0] !== undefined) {
-        res.json(result);
-      } else {
-        res.json({ message: 'Usuario no encontrado' })
-      }
-    });
+    res.json({"OK":"200","msj":"Mesaje GET devuelto desde el controlador empleados Este es un saludo Desde el backend Francisco "});
   };
 
  const readEmpleadosId = (req, res) => {
